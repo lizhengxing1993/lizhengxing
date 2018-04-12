@@ -19,7 +19,7 @@
 				<ul>
                     {% for book in boos_new %}
 					<li>
-						<a href="{% url 'boos:detail' books_id=book.id %}"><img src="{% static books.imagge %}"></a>
+						<a href="{% url 'boos:detail' books_id=book.id %}"><img src="{% static book.image %}"></a>
 						<h4><a href="{% url 'books:detail' books_id=book.id %}">{{ book.name }}</a></h4>
 						<div class="prize">￥{% book.price %}</div>
 					</li>
@@ -62,7 +62,7 @@
                 {% endif %}
             {% endfor %}
             {% if books_li.has_next %}
-				<a href="/list/{{ type_id }}/{{ books.next_page_number }}/?sort={{ sort }}">下一页></a>
+				<a href="/list/{{ type_id }}/{{ books_li.next_page_number }}/?sort={{ sort }}">下一页></a>
             {% endif %}
 			</div>
 		</div>

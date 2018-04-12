@@ -22,8 +22,8 @@ urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls')),  # 富文本编辑器
     url(r'^', include('books.urls', namespace='books')),  # 商品模块
     url(r'^cart/', include('cart.urls', namespace='cart')),  # 购物车模块
-    # url(r'^order/', include('order.urls', namespace='order')), # 订单模块
-    # url(r'^comment/', include('comments.urls', namespace='comment')), # 评论模块
-    # url(r'^search/', include('haystack.urls')), # 搜索配置
-    # url(r'^testapp/', include('testapp.urls', namespace='testapp'))
+    url(r'^order/', include('order.urls', namespace='order')), #　订单模块
+    url(r'^comment/', include('comments.urls', namespace='comment')),#评论模块
+    url(r'^search/', include('haystack.urls')), #搜索功能
+
 ]

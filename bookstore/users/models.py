@@ -21,7 +21,9 @@ class PassportManageer(models.Manager):
 			passport = self.get(username=username)
 		except self.model.DoesNotExist:
 			passport = None
-		return passport
+		if passport:
+			return True
+		return False
 
 
 
@@ -43,7 +45,7 @@ class AddressManager(models.Manager):
 	def get_default_address(self, passport_id):
 		'''查询指定用户的默认收货地址'''
 		try:
-			addr = self.get(passport_id, is_default=True)
+			addr = self.get(passport_id=passport_id, is_default=True)
 		except self.model.DoesNotExist:
 			#没有收货地址
 			addr = None
@@ -72,8 +74,8 @@ class AddressManager(models.Manager):
 
 class Address(BaseModel):
 	'''地址模型类'''
-	recioient_name = models.CharField(max_length=20, verbose_name='收件人')
-	recioient_addr = models.CharField(max_length=256, verbose_name='收件人地址')
+	recipient_name = models.CharField(max_length=20, verbose_name='收件人')
+	recipient_addr = models.CharField(max_length=256, verbose_name='收件人地址')
 	zip_code = models.CharField(max_length=6, verbose_name='邮政编码')
 	recipient_phone = models.CharField(max_length=11, verbose_name='联系电话')
 	is_default = models.BooleanField(default=False, verbose_name='是否默认')
