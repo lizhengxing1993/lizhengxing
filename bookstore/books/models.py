@@ -6,7 +6,8 @@ from tinymce.models import HTMLField
 
 from db.base_model import BaseModel
 from books.enums import *
-
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location='/home/atguigu/djangobook/bookstore/collect_static')
 class BooksManager(models.Manager):
 # 	商品模型管理类
 	'''
@@ -57,6 +58,8 @@ class Books(BaseModel):
 	detail = HTMLField(verbose_name='商品详情')
 	image = models.ImageField(upload_to='books', verbose_name='商品图片')
 	status = models.SmallIntegerField(default=ONLINE, choices=status_choices, verbose_name='商品状态')
+
+	image = models.ImageField(storage=fs, upload_to='books', verbose_name='商品图片')
 
 	objects = BooksManager()
 

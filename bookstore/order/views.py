@@ -13,6 +13,7 @@ import time
 from django.db import transaction
 from order.models import OrderInfo, OrderGoods
 from alipay import AliPay
+from django.conf import settings
 @login_required
 def order_place(request):
 	'''显示提交订单页面'''
@@ -185,22 +186,31 @@ def order_pay(request):
 	except OrderInfo.DoesNotExist:
 		return JsonResponse({'res': 2, 'errmsg': '订单信息出错'})
 
+	app_private_key_path = os.path.join(settings.BASE_DIR, 'order/app_private_key.pem')
+	alipay_public_key_path = os.path.join(settings.BASE_DIR, 'order/app_public_key.pem')
+
+	app_private_key_string = open(app_private_key_path).read()
+	alipay_public_key_string = open(alipay_public_key_path).read()
+
+
+
 	#和支付宝进行交互
 	alipay = AliPay(
-		appid='2016090800464054', #应用id
+		# appid='2016090800464054', #应用id
+		appid='2016091500515408',  # 应用id
 		app_notify_url=None, #默认回调rul
-		app_private_key_path=os.path.join(settings.BASE_DIR, 'order/app_private_key.pem'),
+		app_private_key_string = app_private_key_string,
 		# 支付宝的公钥，验证支付宝回传消息使用，不是你字节的公钥
-		alipay_public_key_path=os.path.join(settings.BASE_DIR, 'order/alipay_public_key.pem'),
+		alipay_public_key_string=alipay_public_key_string,
 		sign_type="RSA2", #RSA　或者　RSA2
 		debug = True, #默认false
 	)
 
 # 电脑网站支付，需要跳转到https://openapi.alipaydev.com/gateway.do? + order_string
-	total_pay = order.total_price + order.total_price
+	total_pay = order.total_price + order.transit_price
 	order_string = alipay.api_alipay_trade_page_pay(
-		out_trade_no=order_id,
-		total_amount=str(total_pay),
+		out_trade_no=order_id, #订单id
+		total_amount=str(total_pay), #josn传递，转为字符串
 		subject='尚硅谷书城%s' % order_id,
 		retutn_url=None,
 		notify_url=None# 可选, 不填则使用默认notify url
@@ -229,13 +239,19 @@ def check_pay(requset):
 	except OrderInfo.DoesNotExist:
 		return JsonResponse({'res': 2, 'errmsg': '订单信息出错'})
 
+	app_private_key_path = os.path.join(settings.BASE_DIR, 'order/app_private_key.pem')
+	alipay_public_key_path = os.path.join(settings.BASE_DIR, 'order/app_public_key.pem')
+
+	app_private_key_string = open(app_private_key_path).read()
+	alipay_public_key_string = open(alipay_public_key_path).read()
+
 	# 和支付宝进行交互
 	alipay = AliPay(
-		appid="2016090800464054",  # 应用id
+		appid="2016091500515408",  # 应用id
 		app_notify_url=None,  # 默认回调url
-		app_private_key_path=os.path.join(settings.BASE_DIR, 'df_order/app_private_key.pem'),
-		alipay_public_key_path=os.path.join(settings.BASE_DIR, 'df_order/alipay_public_key.pem'),
+		app_private_key_string = app_private_key_string,
 		# 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+		alipay_public_key_string = alipay_public_key_string,
 		sign_type="RSA2",  # RSA 或者 RSA2
 		debug=True,  # 默认False
 	)

@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'bookstore',
         'USER':'atguigu',
         'PASSWORD':'atguigu',
-        'HOST':'127.0.0.1',
+        'HOST':'localhost',
         'PORT':3306,
     }
 }
@@ -159,3 +159,6 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 #指定搜索结果每页的条数
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6
+
+#nginx指向路径
+STATIC_ROOT = os.path.join(BASE_DIR, 'collect_static')
